@@ -19,12 +19,20 @@ def CreateProfile(sender, instance, created, **kwargs):
 
 @receiver(user_logged_in, sender=CustomUser)
 def log_success_login(sender, user, **kwargs):
-    print('wooooo')
+    #print('wooooo')
     print(user)
     LoginHistory.objects.create(user=user, login_result=True)
 
 @receiver(user_login_failed)
-def log_success_login(sender, credentials, **kwargs):
-    print('wooooo')
+def log_failed_login(sender, credentials, **kwargs):
+    #print('wooooo')
     print(credentials)
-    LoginHistory.objects.create(user=credentials.get('username', None), login_result=False)
+    try:
+        user = CustomUser.objects.get(email=credentials['username'])
+    except:
+        user = None
+    print(user)
+    LoginHistory.objects.create(user=user, login_result=False)
+    
+
+    #zrobic na foreign key

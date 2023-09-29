@@ -15,12 +15,20 @@ class CustomUser(AbstractBaseUser):
     objects = CustomUserManager()
 
     USERNAME_FIELD = "email"
+    EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
 
 
     def __str__(self) -> str:
         return self.email
     
+    @classmethod
+    def get_email_field_name(cls):
+        print('getting email')
+        try:
+            return cls.EMAIL_FIELD
+        except AttributeError:
+            return "email"
 
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -33,6 +41,7 @@ class UserProfile(models.Model):
         return f'Profile of {self.user.username}'
 
 class LoginHistory(models.Model):
-    user = models.CharField(max_length=60, null=True)
+    #user = models.CharField(max_length=60, null=True)
+    user = models.ForeignKey(CustomUser, null=True, on_delete=models.CASCADE)
     login_time = models.DateTimeField(auto_now=True)
     login_result = models.BooleanField()

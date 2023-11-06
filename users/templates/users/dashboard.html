@@ -1,0 +1,16 @@
+{% extends 'users/base.html' %}
+    
+{% block content %}
+
+logged in!    
+<h1>hello {{ user.email }} !!</h1>
+<h2>You’ve been with us since: {{ user.date_joined }}</h2>
+<h3>Last unsuccessfull login: 
+    {% if login_details.login_time__max %}
+    {{login_details.login_time__max}}
+    {% endif %}
+</h3>
+
+
+
+{% endblock %}
